@@ -12,9 +12,31 @@ def predict_stroke(features):
     probability = model.predict_proba(features)[0][1]
     return prediction, probability
 
+# Function for user authentication
+def authenticate(username, password):
+    # Hardcoded username and password for demonstration
+    if username == "admin" and password == "password":
+        return True
+    else:
+        return False
+
 # Create a Streamlit web app
 def main():
     # Set app title and description
+    st.sidebar.title("Login")
+    username = st.sidebar.text_input("Username")
+    password = st.sidebar.text_input("Password", type="password")
+    if st.sidebar.button("Login"):
+        if authenticate(username, password):
+            st.sidebar.success("Login Successful!")
+            # Show main content when logged in
+            show_main_content()
+        else:
+            st.sidebar.error("Invalid Username or Password")
+    else:
+        st.sidebar.info("Please enter your credentials")
+
+def show_main_content():
     st.title("Gravis")
     st.write("Enter the required information to predict the likelihood of stroke.")
 
