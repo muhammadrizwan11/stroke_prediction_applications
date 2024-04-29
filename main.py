@@ -22,10 +22,10 @@ def predict_stroke(input_data):
     return prediction
 
 # Streamlit UI
-st.title('Stroke Prediction')
+st.title('Gravis')
 
 # Input fields
-st.header('Enter Patient Information:')
+st.write('Enter Patient Information:')
 gender = st.radio('Gender:', ['Male', 'Female'])
 age = st.slider('Age:', min_value=0, max_value=100, value=50, step=1)
 bmi = st.number_input('BMI:', min_value=10.0, max_value=60.0, value=25.0, step=0.1)
