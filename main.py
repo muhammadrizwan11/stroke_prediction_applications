@@ -89,6 +89,8 @@ def show_main_content():
         # Display the prediction
         if prediction[0] == 0:
             st.write("Congratulations! You have a low risk of stroke.")
+            st.write("WhatsApp 03176277912")
+
         else:
             st.write("Warning! You are at a high risk of stroke.")
             st.write("Probability of stroke:", probability)
