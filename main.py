@@ -1,55 +1,73 @@
 import streamlit as st
-import pickle
+import pandas as pd
 import numpy as np
+from sklearn.preprocessing import StandardScaler
+import pickle
 
 # Load the trained model
-model = pickle.load(open('highest_accuracy_model1_knn.pkl', 'rb'))
+model_file = 'knn_model.pkl'
+with open(model_file, 'rb') as file:
+    model = pickle.load(file)
 
-# Function to predict stroke based on input features
-def predict_stroke(features):
-    features = np.array(features).reshape(1, -1)
-    prediction = model.predict(features)
-    probability = model.predict_proba(features)[0][1]
-    return prediction, probability
+# Function to preprocess input data
+def preprocess_input(data):
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(data)
+    return scaled_data
 
-# Create a Streamlit web app
-def main():
-    # Set app title and description
-    st.title("Gravis")
-    st.write("Enter the required information to predict the likelihood of stroke.")
+# Function to make prediction
+def predict_stroke(input_data):
+    scaled_input = preprocess_input(input_data)
+    prediction = model.predict(scaled_input)
+    return prediction
 
-    # Create input fields for user to enter information
-    age = st.number_input("Age", min_value=1, max_value=100, value=30)
-    gender = st.selectbox("Gender", ("Male", "Female"))  # Moved "Gender" closer to "Age"
-    hypertension = st.selectbox("Hypertension", ("Yes", "No"))
-    heart_disease = st.selectbox("Heart Disease", ("Yes", "No"))
-    avg_glucose_level = st.number_input("Average Glucose Level", min_value=0.0, value=80.0)
-    bmi = st.number_input("BMI", min_value=0.0, value=20.0)
-    smoking_status = st.selectbox("Smoking Status", ("Unknown", "Formerly Smoked", "Never Smoked", "Smokes"))
-    ever_married = st.selectbox("Ever Married", ("Yes", "No"))
+# Streamlit UI
+st.title('Stroke Prediction')
 
-    # Convert categorical inputs to numerical values
-    hypertension = 1 if hypertension == "Yes" else 0
-    heart_disease = 1 if heart_disease == "Yes" else 0
-    gender = 1 if gender == "Male" else 0
-    smoking_status = 0 if smoking_status == "Never Smoked" else 1  # Consider never smoked as non-smoker
-    ever_married = 1 if ever_married == "Yes" else 0
+# Input fields
+st.header('Enter Patient Information:')
+gender = st.radio('Gender:', ['Male', 'Female'])
+age = st.slider('Age:', min_value=0, max_value=100, value=50, step=1)
+bmi = st.number_input('BMI:', min_value=10.0, max_value=60.0, value=25.0, step=0.1)
+hypertension = st.selectbox('Hypertension:', ['No', 'Yes'])
+heart_disease = st.selectbox('Heart Disease:', ['No', 'Yes'])
+avg_glucose_level = st.number_input('Average Glucose Level:', min_value=50.0, max_value=300.0, value=100.0, step=0.1)
+ever_married = st.selectbox('Ever Married:', ['No', 'Yes'])
+work_type = st.selectbox('Work Type:', ['Private', 'Self-employed', 'Govt_job', 'Never_worked'])
+residence_type = st.selectbox('Residence Type:', ['Urban', 'Rural'])
+smoking_status = st.selectbox('Smoking Status:', ['never smoked', 'formerly smoked', 'smokes'])
 
-    # Create a button to predict stroke
-    if st.button("Predict Stroke"):
-        # Gather input features
-        features = [age, hypertension, heart_disease, avg_glucose_level, bmi, gender, smoking_status, ever_married]
+# Convert categorical input to numerical
+gender_val = 1 if gender == 'Male' else 0
+hypertension_val = 1 if hypertension == 'Yes' else 0
+heart_disease_val = 1 if heart_disease == 'Yes' else 0
+ever_married_val = 1 if ever_married == 'Yes' else 0
 
-        # Predict stroke and probability
-        prediction, probability = predict_stroke(features)
+work_type_mapping = {'Private': 0, 'Self-employed': 1, 'Govt_job': 2, 'Never_worked': 4}
+work_type_val = work_type_mapping[work_type]
 
-        # Display the prediction
-        if prediction[0] == 0:
-            st.write("Congratulations! You have a low risk of stroke.")
-        else:
-            st.write("Warning! You are at a high risk of stroke.")
-            st.write("Probability of stroke:", probability)
+residence_type_val = 1 if residence_type == 'Urban' else 0
 
-# Run the web app
-if __name__ == "__main__":
-    main()
+smoking_status_mapping = {'never smoked': 0, 'formerly smoked': 1, 'smokes': 2}
+smoking_status_val = smoking_status_mapping[smoking_status]
+
+# Predict button
+if st.button('Predict Stroke'):
+    input_data = {
+        'Gender': [gender_val],
+        'Age': [age],
+        'BMI': [bmi],
+        'Hypertension': [hypertension_val],
+        'HeartDisease': [heart_disease_val],
+        'AverageGlucoseLevel': [avg_glucose_level],
+        'EverMarried': [ever_married_val],
+        'WorkType': [work_type_val],
+        'ResidenceType': [residence_type_val],
+        'SmokingStatus': [smoking_status_val]
+    }
+    input_df = pd.DataFrame(input_data)
+    prediction = predict_stroke(input_df)
+    if prediction[0] == 1:
+        st.error("The model predicts that there is a likelihood of stroke.")
+    else:
+        st.success("The model predicts that there is no likelihood of stroke.")
