@@ -68,6 +68,6 @@ if st.button('Predict Stroke'):
     input_df = pd.DataFrame(input_data)
     prediction = predict_stroke(input_df)
     if prediction[0] == 1:
-        st.error("The model predicts that there is a likelihood of stroke.")
+        st.error("You have high risk of stroke. Please seek advice from Heathcare professional")
     else:
-        st.success("The model predicts that there is no likelihood of stroke.")
+        st.success("Congratulations you have low risk of stroke")
