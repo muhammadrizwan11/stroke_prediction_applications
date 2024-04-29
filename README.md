@@ -2,7 +2,10 @@
 Created a Web Application using Streamlit and Machine learning models on Stroke prediciton
 Whether the paitent gets a stroke or not on the basis of the feature columns given in the dataset 
 
-![s](https://github.com/YashSDholam/Stroke-Prediction-Web-Application/assets/55828491/0a3ff2f1-ce35-4c02-b386-8e6e0a3147b7)
+
+
+![Capture](https://github.com/muhammadrizwan11/stroke_prediction_applications/assets/119028651/d4b01873-f16b-43a9-992c-613d094be9d9)
+
 This Streamlit web app built on the Stroke Prediction dataset from Kaggle aims to provide a user-friendly interface for exploring and analyzing the dataset. Here's a summary of what the Streamlit web app might include:
 
 1. Dataset Overview: The web app provides an overview of the Stroke Prediction dataset, including the number of records, features, and data types. It gives users a quick understanding of the dataset's structure.
