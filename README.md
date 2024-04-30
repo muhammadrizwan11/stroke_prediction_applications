@@ -2,6 +2,7 @@
 Created a Web Application using Streamlit and Machine learning models on Stroke prediciton
 Whether the paitent gets a stroke or not on the basis of the feature columns given in the dataset 
 
+![Capture](https://github.com/muhammadrizwan11/stroke_prediction_applications/assets/119028651/6bc13fc7-94d9-4cea-83da-a17ecf20d740)
 
 ![readme](https://github.com/muhammadrizwan11/stroke_prediction_applications/assets/119028651/c453a8d1-a8fe-4b62-bede-52babcdfad7c)
 
