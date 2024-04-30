@@ -38,7 +38,7 @@ def login():
         return True
 
 # Streamlit UI
-st.title('Gravis')
+st.title('Gravis Prediction Application')
 
 if login():
     # Input fields
